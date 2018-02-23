@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://C:\Users\user\Desktop\androidloginsignupbasic-master\androidloginsignupbasic-master\LoginSignup.iml" filepath="C:\Users\user\Desktop\androidloginsignupbasic-master\androidloginsignupbasic-master\LoginSignup.iml" />
       <module fileurl="file://$PROJECT_DIR$/androidloginsignupbasic-master.iml" filepath="$PROJECT_DIR$/androidloginsignupbasic-master.iml" />
+      <module fileurl="file://C:\Users\user\Desktop\CS-School\androidloginsignupbasic-master\androidloginsignupbasic-master.iml" filepath="C:\Users\user\Desktop\CS-School\androidloginsignupbasic-master\androidloginsignupbasic-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\user\Desktop\CS-School\androidloginsignupbasic-master\app\app.iml" filepath="C:\Users\user\Desktop\CS-School\androidloginsignupbasic-master\app\app.iml" />
       <module fileurl="file://C:\Users\user\Desktop\androidloginsignupbasic-master\androidloginsignupbasic-master\app\app.iml" filepath="C:\Users\user\Desktop\androidloginsignupbasic-master\androidloginsignupbasic-master\app\app.iml" />
     </modules>
   </component>

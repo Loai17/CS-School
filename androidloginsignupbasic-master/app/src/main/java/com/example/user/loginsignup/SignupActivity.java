@@ -13,6 +13,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText etUsername;
     private EditText etPassword;
     private EditText etConfirmPassword;
+    private UserDB db;
 
 
     @Override
@@ -28,21 +29,39 @@ public class SignupActivity extends AppCompatActivity {
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
+        db = new UserDB(this);
     }
 
     public void signUp(View view) {
-        if (etName.getText().toString().equals("")) {
+
+        String name = etName.getText().toString();
+        String username = etUsername.getText().toString();
+        String password = etPassword.getText().toString();
+        String confirmPassword = etConfirmPassword.getText().toString();
+
+        // if username exists: db.getUser(username)
+
+        if (name.equals("")) {
             Toast.makeText(this, "Please enter a Name!", Toast.LENGTH_LONG).show();
+            return;
         }
-        if (etName.getText().toString().equals("")) {
+        else if (username.equals("")) {
             Toast.makeText(this, "Please enter a Username!", Toast.LENGTH_LONG).show();
+            return;
         }
-        if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
-            Toast.makeText(this, "Password does not match!", Toast.LENGTH_LONG).show();
-        } else {
-            if (!etName.getText().toString().equals("") && !etName.getText().toString().equals("")) {
+        else {
+            if (!name.equals("") && !username.equals("")) {
+//                if(db.getUser(username)){
+//                    Toast.makeText(this, "Username already exists!", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+                if (!password.equals(confirmPassword)) {
+                    Toast.makeText(this, "Password does not match!", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 //Add User
-                User user = new User(etName.getText().toString(), etUsername.getText().toString(), etPassword.getText().toString());
+                User user = new User(name, username, password);
+                db.addUser(user);
                 Toast.makeText(this, "You've signed up successfully!", Toast.LENGTH_LONG).show();
                 //Go to Login
                 Intent intent = new Intent(this, LoginActivity.class);
