@@ -25,8 +25,10 @@ public class UserDB extends SQLiteOpenHelper {
         // SQL statement to create user table
         String CREATE_USER_TABLE = "CREATE TABLE user ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name TEXT, "+
+                "fullName TEXT, "+
                 "username TEXT, "+
+                "company TEXT, "+
+                "email TEXT, "+
                 "password TEXT )";
 
         // create userss table
@@ -52,11 +54,13 @@ public class UserDB extends SQLiteOpenHelper {
 
     // users Table Columns names
     private static final String KEY_ID = "id";
-    private static final String KEY_NAME = "name";
+    private static final String KEY_FULLNAME = "fullName";
     private static final String KEY_USERNAME = "username";
+    private static final String KEY_COMPANY = "company";
+    private static final String KEY_EMAIL = "email";
     private static final String KEY_PASSWORD = "password";
 
-    private static final String[] USER_COLUMNS = {KEY_ID,KEY_NAME,KEY_USERNAME,KEY_PASSWORD};
+    private static final String[] USER_COLUMNS = {KEY_ID,KEY_FULLNAME,KEY_USERNAME,KEY_COMPANY,KEY_EMAIL,KEY_PASSWORD};
 
     public void addUser(User user){
         Log.d("addUser", user.toString());
@@ -65,8 +69,10 @@ public class UserDB extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, user.getName()); // get title
+        values.put(KEY_FULLNAME, user.getFullName()); // get title
         values.put(KEY_USERNAME, user.getUsername()); // get title
+        values.put(KEY_COMPANY, user.getCompany()); // get title
+        values.put(KEY_EMAIL, user.getEmail()); // get title
         values.put(KEY_PASSWORD, user.getPassword()); // get title
 
         // 3. insert
@@ -76,39 +82,6 @@ public class UserDB extends SQLiteOpenHelper {
 
         // 4. close
         db.close();
-    }
-
-    public User getUser(int id){
-
-        // 1. get reference to readable DB
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // 2. build query
-        Cursor cursor =
-                db.query(TABLE_USER, // a. table
-                        USER_COLUMNS, // b. column names
-                        " id = ?", // c. selections
-                        new String[] { String.valueOf(id) }, // d. selections args
-                        null, // e. group by
-                        null, // f. having
-                        null, // g. order by
-                        null); // h. limit
-
-        // 3. if we got results get the first one
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        // 4. build user object
-        User user = new User();
-        user.setId(Integer.parseInt(cursor.getString(0)));
-        user.setName(cursor.getString(1));
-        user.setUsername(cursor.getString(2));
-        user.setPassword(cursor.getString(3));
-
-        Log.d("getUser(" + id + ")", user.toString());
-
-        // 5. return user
-        return user;
     }
 
     public User getUser(String username){
@@ -136,9 +109,11 @@ public class UserDB extends SQLiteOpenHelper {
         if (cursor.getCount() > 0) {
             User user = new User();
             user.setId(Integer.parseInt(cursor.getString(0)));
-            user.setName(cursor.getString(1));
+            user.setFullName(cursor.getString(1));
             user.setUsername(cursor.getString(2));
-            user.setPassword(cursor.getString(3));
+            user.setCompany(cursor.getString(3));
+            user.setEmail(cursor.getString(4));
+            user.setPassword(cursor.getString(5));
             Log.d("getUser(" + username + ")", user.toString());
             return user;
         }
@@ -166,9 +141,11 @@ public class UserDB extends SQLiteOpenHelper {
             do {
                 user = new User();
                 user.setId(Integer.parseInt(cursor.getString(0)));
-                user.setName(cursor.getString(1));
+                user.setFullName(cursor.getString(1));
                 user.setUsername(cursor.getString(2));
-                user.setPassword(cursor.getString(3));
+                user.setCompany(cursor.getString(3));
+                user.setEmail(cursor.getString(4));
+                user.setPassword(cursor.getString(5));
 
                 // Add user to users
                 users.add(user);
@@ -189,8 +166,10 @@ public class UserDB extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put("name", user.getName()); // get title
+        values.put("fullName", user.getFullName()); // get title
         values.put("username", user.getUsername()); // get author
+        values.put("company", user.getCompany());
+        values.put("email", user.getEmail());
         values.put("password", user.getPassword());
 
         // 3. updating row
