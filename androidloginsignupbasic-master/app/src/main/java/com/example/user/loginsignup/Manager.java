@@ -4,7 +4,7 @@ package com.example.user.loginsignup;
  * Created by User on 2/16/2018.
  */
 
-public class User {
+public class Manager {
 
     private int id;
     private String fullName;
@@ -13,11 +13,11 @@ public class User {
     private String email;
     private String password;
 
-    public User() {
+    public Manager() {
 
     }
 
-    public User(String fullName, String username, String company,String email, String password) {
+    public Manager(String fullName, String username, String company,String email, String password) {
         this.fullName = fullName;
         this.username = username;
         this.company = company;
@@ -25,7 +25,7 @@ public class User {
         this.password = password;
     }
 
-    public User(int id, String fullName, String username, String company,String email, String password) {
+    public Manager(int id, String fullName, String username, String company,String email, String password) {
         this.id = id;
         this.fullName = fullName;
         this.username = username;
@@ -84,7 +84,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Manager{" +
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
                 ", username='" + username + '\'' +

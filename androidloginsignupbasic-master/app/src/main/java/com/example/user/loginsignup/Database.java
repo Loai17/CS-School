@@ -9,21 +9,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class UserDB extends SQLiteOpenHelper {
+public class Database extends SQLiteOpenHelper {
 
     // Database Version
     private static final int DATABASE_VERSION = 1;
     // Database Name
-    private static final String DATABASE_NAME = "UserDB";
+    private static final String DATABASE_NAME = "Database";
 
-    public UserDB(Context context) {
+    public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         // SQL statement to create user table
-        String CREATE_USER_TABLE = "CREATE TABLE user ( " +
+        String CREATE_MANAGER_TABLE = "CREATE TABLE manager ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "fullName TEXT, "+
                 "username TEXT, "+
@@ -32,13 +32,13 @@ public class UserDB extends SQLiteOpenHelper {
                 "password TEXT )";
 
         // create userss table
-        db.execSQL(CREATE_USER_TABLE);
+        db.execSQL(CREATE_MANAGER_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older users table if existed
-        db.execSQL("DROP TABLE IF EXISTS user");
+        db.execSQL("DROP TABLE IF EXISTS manager");
 
         // create fresh users table
         this.onCreate(db);
@@ -50,7 +50,7 @@ public class UserDB extends SQLiteOpenHelper {
      */
 
     // users table name
-    private static final String TABLE_USER = "user";
+    private static final String TABLE_MANAGER = "manager";
 
     // users Table Columns names
     private static final String KEY_ID = "id";
@@ -60,23 +60,23 @@ public class UserDB extends SQLiteOpenHelper {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PASSWORD = "password";
 
-    private static final String[] USER_COLUMNS = {KEY_ID,KEY_FULLNAME,KEY_USERNAME,KEY_COMPANY,KEY_EMAIL,KEY_PASSWORD};
+    private static final String[] MANAGER_COLUMNS = {KEY_ID,KEY_FULLNAME,KEY_USERNAME,KEY_COMPANY,KEY_EMAIL,KEY_PASSWORD};
 
-    public void addUser(User user){
-        Log.d("addUser", user.toString());
+    public void addManager(Manager manager){
+        Log.d("addManager", manager.toString());
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_FULLNAME, user.getFullName()); // get title
-        values.put(KEY_USERNAME, user.getUsername()); // get title
-        values.put(KEY_COMPANY, user.getCompany()); // get title
-        values.put(KEY_EMAIL, user.getEmail()); // get title
-        values.put(KEY_PASSWORD, user.getPassword()); // get title
+        values.put(KEY_FULLNAME, manager.getFullName()); // get title
+        values.put(KEY_USERNAME, manager.getUsername()); // get title
+        values.put(KEY_COMPANY, manager.getCompany()); // get title
+        values.put(KEY_EMAIL, manager.getEmail()); // get title
+        values.put(KEY_PASSWORD, manager.getPassword()); // get title
 
         // 3. insert
-        db.insert(TABLE_USER, // table
+        db.insert(TABLE_MANAGER, // table
                 null, //nullColumnHack
                 values); // key/value -> keys = column names/ values = column values
 
@@ -84,15 +84,15 @@ public class UserDB extends SQLiteOpenHelper {
         db.close();
     }
 
-    public User getUser(String username){
+    public Manager getManager(String username){
 
         // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
         // 2. build query
         Cursor cursor =
-                db.query(TABLE_USER, // a. table
-                        USER_COLUMNS, // b. column names
+                db.query(TABLE_MANAGER, // a. table
+                        MANAGER_COLUMNS, // b. column names
                         " username = ?", // c. selections
                         new String[] { String.valueOf(username) }, // d. selections args
                         null, // e. group by
@@ -107,76 +107,76 @@ public class UserDB extends SQLiteOpenHelper {
         // 4. build user object
 
         if (cursor.getCount() > 0) {
-            User user = new User();
-            user.setId(Integer.parseInt(cursor.getString(0)));
-            user.setFullName(cursor.getString(1));
-            user.setUsername(cursor.getString(2));
-            user.setCompany(cursor.getString(3));
-            user.setEmail(cursor.getString(4));
-            user.setPassword(cursor.getString(5));
-            Log.d("getUser(" + username + ")", user.toString());
-            return user;
+            Manager manager = new Manager();
+            manager.setId(Integer.parseInt(cursor.getString(0)));
+            manager.setFullName(cursor.getString(1));
+            manager.setUsername(cursor.getString(2));
+            manager.setCompany(cursor.getString(3));
+            manager.setEmail(cursor.getString(4));
+            manager.setPassword(cursor.getString(5));
+            Log.d("getManager(" + username + ")", manager.toString());
+            return manager;
         }
         else {
-            Log.d("getUser(" + username + ")", "null");
+            Log.d("getManager(" + username + ")", "null");
             return null;
         }
         // 5. return user
     }
 
     // Get All users
-    public List<User> getAllUsers() {
-        List<User> users = new LinkedList<User>();
+    public List<Manager> getAllManagers() {
+        List<Manager> managers = new LinkedList<Manager>();
 
         // 1. build the query
-        String query = "SELECT  * FROM " + TABLE_USER;
+        String query = "SELECT  * FROM " + TABLE_MANAGER;
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
         // 3. go over each row, build user and add it to list
-        User user = null;
+        Manager manager = null;
         if (cursor.moveToFirst()) {
             do {
-                user = new User();
-                user.setId(Integer.parseInt(cursor.getString(0)));
-                user.setFullName(cursor.getString(1));
-                user.setUsername(cursor.getString(2));
-                user.setCompany(cursor.getString(3));
-                user.setEmail(cursor.getString(4));
-                user.setPassword(cursor.getString(5));
+                manager = new Manager();
+                manager.setId(Integer.parseInt(cursor.getString(0)));
+                manager.setFullName(cursor.getString(1));
+                manager.setUsername(cursor.getString(2));
+                manager.setCompany(cursor.getString(3));
+                manager.setEmail(cursor.getString(4));
+                manager.setPassword(cursor.getString(5));
 
                 // Add user to users
-                users.add(user);
+                managers.add(manager);
             } while (cursor.moveToNext());
         }
 
-        Log.d("getAllUsers()", users.toString());
+        Log.d("getAllManagers()", managers.toString());
 
         // return users
-        return users;
+        return managers;
     }
 
     // Updating single user
-    public int updateUser(User user) {
+    public int updateManager(Manager manager) {
 
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put("fullName", user.getFullName()); // get title
-        values.put("username", user.getUsername()); // get author
-        values.put("company", user.getCompany());
-        values.put("email", user.getEmail());
-        values.put("password", user.getPassword());
+        values.put("fullName", manager.getFullName()); // get title
+        values.put("username", manager.getUsername()); // get author
+        values.put("company", manager.getCompany());
+        values.put("email", manager.getEmail());
+        values.put("password", manager.getPassword());
 
         // 3. updating row
-        int i = db.update(TABLE_USER, //table
+        int i = db.update(TABLE_MANAGER, //table
                 values, // column/value
                 KEY_ID+" = ?", // selections
-                new String[] { String.valueOf(user.getId()) }); //selection args
+                new String[] { String.valueOf(manager.getId()) }); //selection args
 
         // 4. close
         db.close();
@@ -186,19 +186,19 @@ public class UserDB extends SQLiteOpenHelper {
     }
 
     // Deleting single user
-    public void deleteUser(User user) {
+    public void deleteManager(Manager manager) {
 
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // 2. delete
-        db.delete(TABLE_USER,
+        db.delete(TABLE_MANAGER,
                 KEY_ID+" = ?",
-                new String[] { String.valueOf(user.getId()) });
+                new String[] { String.valueOf(manager.getId()) });
 
         // 3. close
         db.close();
 
-        Log.d("deleteUser", user.toString());
+        Log.d("deleteManager", manager.toString());
     }
 }

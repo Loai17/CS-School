@@ -13,7 +13,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etUsername;
     private EditText etPassword;
     private Button btnLogin;
-    private UserDB db;
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,17 +27,17 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
-        db = new UserDB(this);
+        db = new Database(this);
     }
 
     public void gotoHome(View view) {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
 
-        if (db.getUser(username)!=null)
+        if (db.getManager(username)!=null)
         {
-            User user = db.getUser(username);
-            if(user.getPassword().equals(password))
+            Manager manager = db.getManager(username);
+            if(manager.getPassword().equals(password))
                 Toast.makeText(this, "You've logged in successfully!", Toast.LENGTH_LONG).show();
             else {
                 Toast.makeText(this, "Incorrect Username or Password!!", Toast.LENGTH_LONG).show();
