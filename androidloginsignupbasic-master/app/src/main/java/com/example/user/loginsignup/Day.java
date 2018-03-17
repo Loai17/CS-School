@@ -11,14 +11,14 @@ public class Day {
     private int id;
     private int companyId;
     private int jobId;
-    private Date date;
+    private String date;
     private String name;
     private String description;
 
     public Day() {
     }
 
-    public Day(int companyId, int jobId, Date date, String name, String description) {
+    public Day(int companyId, int jobId, String date, String name, String description) {
         this.companyId = companyId;
         this.jobId = jobId;
         this.date = date;
@@ -26,7 +26,7 @@ public class Day {
         this.description = description;
     }
 
-    public Day(int id, int companyId, int jobId, Date date, String name, String description) {
+    public Day(int id, int companyId, int jobId, String date, String name, String description) {
         this.id = id;
         this.companyId = companyId;
         this.jobId = jobId;
@@ -59,11 +59,11 @@ public class Day {
         this.jobId = jobId;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

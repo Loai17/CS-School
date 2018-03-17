@@ -117,13 +117,8 @@ public class Database extends SQLiteOpenHelper {
         // create fresh users table
         this.onCreate(db);
     }
-    //---------------------------------------------------------------------
 
-    /**
-     * CRUD operations (create "add", read "get", update, delete) user + get all users + delete all users
-     */
-
-    // users table name
+    // Manager ------------------------------------------------------------
     private static final String TABLE_MANAGER = "manager";
 
     // users Table Columns names
@@ -143,11 +138,11 @@ public class Database extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_FULLNAME, manager.getFullName()); // get title
-        values.put(KEY_USERNAME, manager.getUsername()); // get title
-        values.put(KEY_COMPANY, manager.getCompany()); // get title
-        values.put(KEY_EMAIL, manager.getEmail()); // get title
-        values.put(KEY_PASSWORD, manager.getPassword()); // get title
+        values.put(KEY_FULLNAME, manager.getFullName());
+        values.put(KEY_USERNAME, manager.getUsername());
+        values.put(KEY_COMPANY, manager.getCompany());
+        values.put(KEY_EMAIL, manager.getEmail());
+        values.put(KEY_PASSWORD, manager.getPassword());
 
         // 3. insert
         db.insert(TABLE_MANAGER, // table
@@ -291,7 +286,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String[] JOB_COLUMNS = {KEY_ID_JOB,KEY_COMPANYID_JOB,KEY_NAME_JOB,KEY_LOCATION_JOB,KEY_DESCRIPTION_JOB,KEY_STARTDATE_JOB,KEY_ENDDATE_JOB};
 
     public void addJob(Job job){
-        Log.d("adJob", job.toString());
+        Log.d("addJob", job.toString());
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -418,7 +413,7 @@ public class Database extends SQLiteOpenHelper {
 
     }
 
-    // Deleting single user
+    // Deleting single job
     public void deleteJob(Job job) {
 
         // 1. get reference to writable DB
@@ -435,4 +430,159 @@ public class Database extends SQLiteOpenHelper {
         Log.d("deleteJob", job.toString());
     }
 
+    // Day -----------------------------------------------------------------------
+    private static final String TABLE_DAY = "day";
+
+    // Job Table Columns names
+    private static final String KEY_ID_DAY = "id";
+    private static final String KEY_COMPANYID_DAY = "companyId";
+    private static final String KEY_JOBID_DAY = "jobId";
+    private static final String KEY_DATE_DAY = "date";
+    private static final String KEY_NAME_DAY = "name";
+    private static final String KEY_DESCRIPTION_DAY = "description";
+
+    private static final String[] DAY_COLUMNS = {KEY_ID_DAY,KEY_COMPANYID_DAY,KEY_JOBID_DAY,KEY_DATE_DAY,KEY_NAME_DAY,KEY_DESCRIPTION_DAY};
+
+    public void addDay(Day day){
+        Log.d("addDay", day.toString());
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID_DAY, day.getId());
+        values.put(KEY_COMPANYID_DAY, day.getCompanyId());
+        values.put(KEY_JOBID_DAY, day.getJobId());
+        values.put(KEY_DATE_DAY, day.getDate());
+        values.put(KEY_NAME_DAY, day.getName());
+        values.put(KEY_DESCRIPTION_DAY, day.getDescription());
+
+        // 3. insert
+        db.insert(TABLE_DAY, // table
+                null, //nullColumnHack
+                values); // key/value -> keys = column names/ values = column values
+
+        // 4. close
+        db.close();
+    }
+
+    public Day getDay(String name){
+
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor =
+                db.query(TABLE_DAY, // a. table
+                        DAY_COLUMNS, // b. column names
+                        " name = ?", // c. selections
+                        new String[] { String.valueOf(name) }, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        null, // g. order by
+                        null); // h. limit
+
+        // 3. if we got results get the first one
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        // 4. build user object
+
+        if (cursor.getCount() > 0) {
+            Day day = new Day();
+            day.setId(Integer.parseInt(cursor.getString(0)));
+            day.setCompanyId(Integer.parseInt(cursor.getString(1)));
+            day.setJobId(Integer.parseInt(cursor.getString(2)));
+            day.setDate(cursor.getString(3));
+            day.setName(cursor.getString(4));
+            day.setDescription(cursor.getString(5));
+            Log.d("getDay(" + name + ")", day.toString());
+            return day;
+        }
+        else {
+            Log.d("getDay(" + name + ")", "null");
+            return null;
+        }
+        // 5. return user
+    }
+
+    // Get All users
+    public List<Day> getAllDays() {
+        List<Day> days = new LinkedList<Day>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLE_DAY;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build user and add it to list
+        Day day = null;
+        if (cursor.moveToFirst()) {
+            do {
+                day = new Day();
+                day.setId(Integer.parseInt(cursor.getString(0)));
+                day.setCompanyId(Integer.parseInt(cursor.getString(1)));
+                day.setJobId(Integer.parseInt(cursor.getString(2)));
+                day.setDate(cursor.getString(3));
+                day.setName(cursor.getString(4));
+                day.setDescription(cursor.getString(5));
+
+                // Add day to days
+                days.add(day);
+            } while (cursor.moveToNext());
+        }
+
+        Log.d("getAllDays()", days.toString());
+
+        // return users
+        return days;
+    }
+
+    // Updating single user
+    public int updateDay(Day day) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put("companyId", day.getCompanyId()); // get title
+        values.put("jobId", day.getJobId()); // get author
+        values.put("date", day.getDate());
+        values.put("name", day.getName());
+        values.put("description", day.getDescription());
+
+        // 3. updating rowd
+        int i = db.update(TABLE_DAY, //table
+                values, // column/value
+                KEY_ID_DAY+" = ?", // selections
+                new String[] { String.valueOf(day.getId()) }); //selection args
+
+        // 4. close
+        db.close();
+
+        return i;
+
+    }
+
+    // Deleting single day
+    public void deleteDay(Day day) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_DAY,
+                KEY_ID_DAY+" = ?",
+                new String[] { String.valueOf(day.getId()) });
+
+        // 3. close
+        db.close();
+
+        Log.d("deleteDay", day.toString());
+    }
+
+    // Continue worker
 }
