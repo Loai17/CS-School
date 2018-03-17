@@ -13,13 +13,13 @@ public class Job {
     private String name;
     private String location;
     private String description;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
 
     public Job() {
     }
 
-    public Job(int companyId, String name, String location, String description, Date startDate, Date endDate) {
+    public Job(int companyId, String name, String location, String description, String startDate, String endDate) {
         this.companyId = companyId;
         this.name = name;
         this.location = location;
@@ -28,7 +28,7 @@ public class Job {
         this.endDate = endDate;
     }
 
-    public Job(int id, int companyId, String name, String location, String description, Date startDate, Date endDate) {
+    public Job(int id, int companyId, String name, String location, String description, String startDate, String endDate) {
         this.id = id;
         this.companyId = companyId;
         this.name = name;
@@ -78,19 +78,19 @@ public class Job {
         this.description = description;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 

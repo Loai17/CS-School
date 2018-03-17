@@ -15,7 +15,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private EditText etConfirmPassword;
-    private UserDB db;
+    private Database db;
 
 
     @Override
@@ -33,7 +33,7 @@ public class SignupActivity extends AppCompatActivity {
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
-        db = new UserDB(this);
+        db = new Database(this);
     }
 
     public void signUp(View view) {
@@ -53,7 +53,7 @@ public class SignupActivity extends AppCompatActivity {
         }
         else {
             if (!fullName.equals("") && !username.equals("")) {
-                if(db.getUser(username) != null){
+                if(db.getManager(username) != null){
                     Toast.makeText(this, "Username already exists!", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -62,8 +62,8 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
                 //Add User
-                User user = new User(fullName,username,company,email,password);
-                db.addUser(user);
+                Manager manager = new Manager(fullName,username,company,email,password);
+                db.addManager(manager);
                 Toast.makeText(this, "You've signed up successfully!", Toast.LENGTH_LONG).show();
                 //Go to Login
                 Intent intent = new Intent(this, LoginActivity.class);
