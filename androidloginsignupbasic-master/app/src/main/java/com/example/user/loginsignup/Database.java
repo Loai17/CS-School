@@ -761,5 +761,306 @@ public class Database extends SQLiteOpenHelper {
         Log.d("deleteWorker", worker.toString());
     }
 
-    // Continue DayImage
+    // DayImage -----------------------------------------------------------------------
+    private static final String TABLE_DAYIMAGE = "dayImage";
+
+    // Job Table Columns names
+    private static final String KEY_ID_DAYIMAGE = "id";
+    private static final String KEY_DAYID_DAYIMAGE = "dayId";
+    private static final String KEY_IMAGE_DAYIMAGE = "image";
+    private static final String KEY_DESCRIPTION_DAYIMAGE = "description";
+
+    private static final String[] DAYIMAGE_COLUMNS = {KEY_ID_DAYIMAGE,KEY_DAYID_DAYIMAGE,KEY_IMAGE_DAYIMAGE,KEY_DESCRIPTION_DAYIMAGE};
+
+    public void addDayImage(DayImage dayImage){
+        Log.d("addDayImage", dayImage.toString());
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID_DAYIMAGE, dayImage.getId());
+        values.put(KEY_DAYID_DAYIMAGE, dayImage.getDayId());
+        values.put(KEY_IMAGE_DAYIMAGE, dayImage.getImage());
+        values.put(KEY_DESCRIPTION_DAYIMAGE, dayImage.getDescription());
+
+        // 3. insert
+        db.insert(TABLE_DAYIMAGE, // table
+                null, //nullColumnHack
+                values); // key/value -> keys = column names/ values = column values
+
+        // 4. close
+        db.close();
+    }
+
+    public DayImage getDayImage(String image){
+
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor =
+                db.query(TABLE_DAYIMAGE, // a. table
+                        DAYIMAGE_COLUMNS, // b. column names
+                        " image = ?", // c. selections
+                        new String[] { String.valueOf(image) }, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        null, // g. order by
+                        null); // h. limit
+
+        // 3. if we got results get the first one
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        // 4. build user object
+
+        if (cursor.getCount() > 0) {
+            DayImage dayImage = new DayImage();
+            dayImage.setId(Integer.parseInt(cursor.getString(0)));
+            dayImage.setDayId(Integer.parseInt(cursor.getString(1)));
+            dayImage.setImage(cursor.getString(2));
+            dayImage.setDescription(cursor.getString(3));
+            Log.d("getDayImage(" + image + ")", dayImage.toString());
+            return dayImage;
+
+        }
+        else {
+            Log.d("getDayImage(" + image + ")", "null");
+            return null;
+        }
+        // 5. return user
+    }
+
+    // Get All users
+    public List<DayImage> getAllDayImages() {
+        List<DayImage> dayImages = new LinkedList<DayImage>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLE_DAYIMAGE;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build user and add it to list
+        DayImage dayImage = null;
+        if (cursor.moveToFirst()) {
+            do {
+                dayImage = new DayImage();
+                dayImage.setId(Integer.parseInt(cursor.getString(0)));
+                dayImage.setDayId(Integer.parseInt(cursor.getString(1)));
+                dayImage.setImage(cursor.getString(2));
+                dayImage.setDescription(cursor.getString(3));
+
+
+
+                // Add day to days
+                dayImages.add(dayImage);
+            } while (cursor.moveToNext());
+        }
+
+        Log.d("getAllDayImages()", dayImages.toString());
+
+        // return users
+        return dayImages;
+    }
+
+    // Updating single user
+    public int updateDayImage(DayImage dayImage) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put("dayId", dayImage.getDayId()); // get title
+        values.put("image", dayImage.getImage()); // get author
+        values.put("description", dayImage.getDescription());
+
+        // 3. updating rowd
+        int i = db.update(TABLE_DAYIMAGE, //table
+                values, // column/value
+                KEY_ID_DAYIMAGE+" = ?", // selections
+                new String[] { String.valueOf(dayImage.getId()) }); //selection args
+
+        // 4. close
+        db.close();
+
+        return i;
+
+    }
+
+    // Deleting single day
+    public void deleteDayImage(DayImage dayImage) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_DAYIMAGE,
+                KEY_ID_DAYIMAGE+" = ?",
+                new String[] { String.valueOf(dayImage.getId()) });
+
+        // 3. close
+        db.close();
+
+        Log.d("deleteDayImage", dayImage.toString());
+    }
+
+    // Supply -----------------------------------------------------------------------
+    private static final String TABLE_SUPPLY = "supply";
+
+    String CREATE_SUPPLY_TABLE = "CREATE TABLE supply ( " +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "name TEXT, "+
+            "image TEXT, "+
+            "description TEXT )";
+
+
+    // Job Table Columns names
+    private static final String KEY_ID_SUPPLY = "id";
+    private static final String KEY_NAME_SUPPLY = "name";
+    private static final String KEY_IMAGE_SUPPLY = "image";
+    private static final String KEY_DESCRIPTION_SUPPLY = "description";
+
+    private static final String[] SUPPLY_COLUMNS = {KEY_ID_SUPPLY,KEY_NAME_SUPPLY,KEY_IMAGE_SUPPLY,KEY_DESCRIPTION_SUPPLY};
+
+    public void addSupply(Supply supply){
+        Log.d("addSupply", supply.toString());
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID_SUPPLY, supply.getId());
+        values.put(KEY_NAME_SUPPLY, supply.getName());
+        values.put(KEY_IMAGE_SUPPLY, supply.getImage());
+        values.put(KEY_DESCRIPTION_SUPPLY, supply.getDescription());
+
+        // 3. insert
+        db.insert(TABLE_SUPPLY, // table
+                null, //nullColumnHack
+                values); // key/value -> keys = column names/ values = column values
+
+        // 4. close
+        db.close();
+    }
+
+    public Supply getSupply(String name){
+
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor =
+                db.query(TABLE_SUPPLY, // a. table
+                        SUPPLY_COLUMNS, // b. column names
+                        " name = ?", // c. selections
+                        new String[] { String.valueOf(name) }, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        null, // g. order by
+                        null); // h. limit
+
+        // 3. if we got results get the first one
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        // 4. build user object
+
+        if (cursor.getCount() > 0) {
+            Supply supply = new Supply();
+            supply.setId(Integer.parseInt(cursor.getString(0)));
+            supply.setName(cursor.getString(1));
+            supply.setImage(cursor.getString(2));
+            supply.setDescription(cursor.getString(3));
+            Log.d("getSupply(" + name + ")", supply.toString());
+            return supply;
+
+        }
+        else {
+            Log.d("getSupply(" + name + ")", "null");
+            return null;
+        }
+        // 5. return user
+    }
+
+    // Get All users
+    public List<Supply> getAllSupplies() {
+        List<Supply> supplies = new LinkedList<Supply>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLE_SUPPLY;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build user and add it to list
+        Supply supply = null;
+        if (cursor.moveToFirst()) {
+            do {
+                supply = new Supply();
+                supply.setId(Integer.parseInt(cursor.getString(0)));
+                supply.setName(cursor.getString(1));
+                supply.setImage(cursor.getString(2));
+                supply.setDescription(cursor.getString(3));
+
+
+
+                // Add day to days
+                supplies.add(supply);
+            } while (cursor.moveToNext());
+        }
+
+        Log.d("getAllSupplies()", supplies.toString());
+
+        // return users
+        return supplies;
+    }
+
+    // Updating single user
+    public int updateSupply(Supply supply) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put("name", supply.getName()); // get title
+        values.put("image", supply.getImage()); // get author
+        values.put("description", supply.getDescription());
+
+        // 3. updating rowd
+        int i = db.update(TABLE_SUPPLY, //table
+                values, // column/value
+                KEY_ID_SUPPLY+" = ?", // selections
+                new String[] { String.valueOf(supply.getId()) }); //selection args
+
+        // 4. close
+        db.close();
+
+        return i;
+
+    }
+
+    // Deleting single day
+    public void deleteSupply(Supply supply) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_SUPPLY,
+                KEY_ID_SUPPLY+" = ?",
+                new String[] { String.valueOf(supply.getId()) });
+
+        // 3. close
+        db.close();
+
+        Log.d("deleteSupply", supply.toString());
+    }
+
+    // Continue DaySupply
 }
