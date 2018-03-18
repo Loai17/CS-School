@@ -13,7 +13,7 @@ public class Worker {
     private int id;
     private int companyId;
     private String name;
-    private Date dob;
+    private String dob;
     private String username;
     private String password;
     private String experience;
@@ -24,7 +24,7 @@ public class Worker {
     public Worker() {
     }
 
-    public Worker(int companyId, String name, Date dob, String username, String password, String experience, double payment, String paymentMethod, String photo) {
+    public Worker(int companyId, String name, String dob, String username, String password, String experience, double payment, String paymentMethod, String photo) {
         this.companyId = companyId;
         this.name = name;
         this.dob = dob;
@@ -36,7 +36,7 @@ public class Worker {
         this.photo = photo;
     }
 
-    public Worker(int id, int companyId, String name, Date dob, String username, String password, String experience, double payment, String paymentMethod, String photo) {
+    public Worker(int id, int companyId, String name, String dob, String username, String password, String experience, double payment, String paymentMethod, String photo) {
         this.id = id;
         this.companyId = companyId;
         this.name = name;
@@ -73,11 +73,11 @@ public class Worker {
         this.name = name;
     }
 
-    public Date getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 

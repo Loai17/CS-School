@@ -584,5 +584,182 @@ public class Database extends SQLiteOpenHelper {
         Log.d("deleteDay", day.toString());
     }
 
-    // Continue worker
+    // Worker -----------------------------------------------------------------------
+    private static final String TABLE_WORKER = "worker";
+
+    // Job Table Columns names
+    private static final String KEY_ID_WORKER = "id";
+    private static final String KEY_COMPANYID_WORKER = "companyId";
+    private static final String KEY_NAME_WORKER = "name";
+    private static final String KEY_DOB_WORKER = "dob";
+    private static final String KEY_USERNAME_WORKER = "username";
+    private static final String KEY_PASSWORD_WORKER = "password";
+    private static final String KEY_EXPERIENCE_WORKER = "experience";
+    private static final String KEY_PAYMENT_WORKER = "payment";
+    private static final String KEY_PAYMENTMETHOD_WORKER = "paymentMethod";
+    private static final String KEY_PHOTO_WORKER = "photo";
+
+    private static final String[] WORKER_COLUMNS = {KEY_ID_WORKER,KEY_COMPANYID_WORKER,KEY_NAME_WORKER,KEY_DOB_WORKER,KEY_USERNAME_WORKER,KEY_PASSWORD_WORKER,KEY_EXPERIENCE_WORKER,KEY_PAYMENT_WORKER,KEY_PAYMENTMETHOD_WORKER,KEY_PHOTO_WORKER};
+
+    public void addWorker(Worker worker){
+        Log.d("addWorker", worker.toString());
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID_WORKER, worker.getId());
+        values.put(KEY_COMPANYID_WORKER, worker.getCompanyId());
+        values.put(KEY_NAME_WORKER, worker.getName());
+        values.put(KEY_DOB_WORKER, worker.getDob());
+        values.put(KEY_USERNAME_WORKER, worker.getUsername());
+        values.put(KEY_PASSWORD_WORKER, worker.getPassword());
+        values.put(KEY_EXPERIENCE_WORKER, worker.getExperience());
+        values.put(KEY_PAYMENT_WORKER, worker.getPayment());
+        values.put(KEY_PAYMENTMETHOD_WORKER, worker.getPaymentMethod());
+        values.put(KEY_PHOTO_WORKER, worker.getPhoto());
+
+        // 3. insert
+        db.insert(TABLE_WORKER, // table
+                null, //nullColumnHack
+                values); // key/value -> keys = column names/ values = column values
+
+        // 4. close
+        db.close();
+    }
+
+    public Worker getWorker(String username){
+
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor =
+                db.query(TABLE_WORKER, // a. table
+                        WORKER_COLUMNS, // b. column names
+                        " name = ?", // c. selections
+                        new String[] { String.valueOf(username) }, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        null, // g. order by
+                        null); // h. limit
+
+        // 3. if we got results get the first one
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        // 4. build user object
+
+        if (cursor.getCount() > 0) {
+            Worker worker = new Worker();
+            worker.setId(Integer.parseInt(cursor.getString(0)));
+            worker.setCompanyId(Integer.parseInt(cursor.getString(1)));
+            worker.setName(cursor.getString(2));
+            worker.setDob(cursor.getString(3));
+            worker.setUsername(cursor.getString(4));
+            worker.setPassword(cursor.getString(5));
+            worker.setExperience(cursor.getString(6));
+            worker.setPayment(Integer.parseInt(cursor.getString(7)));
+            worker.setPaymentMethod(cursor.getString(8));
+            worker.setPhoto(cursor.getString(9));
+            Log.d("getWorker(" + username + ")", worker.toString());
+            return worker;
+
+        }
+        else {
+            Log.d("getWorker(" + username + ")", "null");
+            return null;
+        }
+        // 5. return user
+    }
+
+    // Get All users
+    public List<Worker> getAllWorkers() {
+        List<Worker> workers = new LinkedList<Worker>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLE_WORKER;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build user and add it to list
+        Worker worker = null;
+        if (cursor.moveToFirst()) {
+            do {
+                worker = new Worker();
+                worker.setId(Integer.parseInt(cursor.getString(0)));
+                worker.setCompanyId(Integer.parseInt(cursor.getString(1)));
+                worker.setName(cursor.getString(2));
+                worker.setDob(cursor.getString(3));
+                worker.setUsername(cursor.getString(4));
+                worker.setPassword(cursor.getString(5));
+                worker.setExperience(cursor.getString(6));
+                worker.setPayment(Integer.parseInt(cursor.getString(7)));
+                worker.setPaymentMethod(cursor.getString(8));
+                worker.setPhoto(cursor.getString(9));
+
+
+                // Add day to days
+                workers.add(worker);
+            } while (cursor.moveToNext());
+        }
+
+        Log.d("getAllWorkers()", workers.toString());
+
+        // return users
+        return workers;
+    }
+
+    // Updating single user
+    public int updateWorker(Worker worker) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put("companyId", worker.getCompanyId()); // get title
+        values.put("name", worker.getName()); // get author
+        values.put("dob", worker.getDob());
+        values.put("username", worker.getUsername());
+        values.put("password", worker.getPassword());
+        values.put("experience", worker.getExperience());
+        values.put("payment", worker.getPayment());
+        values.put("paymentMethod", worker.getPaymentMethod());
+        values.put("photo", worker.getPhoto());
+
+
+        // 3. updating rowd
+        int i = db.update(TABLE_WORKER, //table
+                values, // column/value
+                KEY_ID_DAY+" = ?", // selections
+                new String[] { String.valueOf(worker.getId()) }); //selection args
+
+        // 4. close
+        db.close();
+
+        return i;
+
+    }
+
+    // Deleting single day
+    public void deleteWorker(Worker worker) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_WORKER,
+                KEY_ID_WORKER+" = ?",
+                new String[] { String.valueOf(worker.getId()) });
+
+        // 3. close
+        db.close();
+
+        Log.d("deleteWorker", worker.toString());
+    }
+
+    // Continue DayImage
 }
