@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">LoginSignup</string>
+    <string name="jobs_manager">Jobs Manager</string>
+    <string name="title_activity_jobs_manager">JobsManagerActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
