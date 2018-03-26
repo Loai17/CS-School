@@ -41,6 +41,5 @@ public class JobsManagerActivity extends AppCompatActivity {
         jobsList = databaseHelper.getAllJobs();
         adapter = new MyAdapter(JobsManagerActivity.this, (ArrayList<Job>) jobsList);
         gridView.setAdapter(adapter);
-
     }
 }

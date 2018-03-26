@@ -17,7 +17,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignupActivity" />
-        <activity android:name=".JobsManager"></activity>
+        <activity
+            android:name=".JobsManagerActivity"
+            android:label="@string/title_activity_jobs_manager"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
