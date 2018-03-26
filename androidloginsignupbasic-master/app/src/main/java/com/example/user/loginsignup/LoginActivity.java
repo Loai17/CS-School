@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
             Manager manager = db.getManager(username);
             if(manager.getPassword().equals(password)) {
                 //Toast.makeText(this, "You've logged in successfully!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, JobsManager.class);
+                Intent intent = new Intent(this, JobsManagerActivity.class);
                 startActivity(intent);
             }
             else {
