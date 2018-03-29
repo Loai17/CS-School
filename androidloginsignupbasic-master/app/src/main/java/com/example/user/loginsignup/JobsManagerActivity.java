@@ -27,8 +27,6 @@ public class JobsManagerActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-
-
         gridView = (GridView) findViewById(R.id.gv_jobs);
 
         Database databaseHelper = new Database(JobsManagerActivity.this);

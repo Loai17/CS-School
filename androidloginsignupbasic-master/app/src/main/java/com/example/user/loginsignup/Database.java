@@ -38,7 +38,8 @@ public class Database extends SQLiteOpenHelper {
                 "location TEXT, "+
                 "description TEXT, "+
                 "startDate TEXT, "+ //Date instead of TEXT
-                "endDate TEXT )"; //Date instead of TEXT
+                "endDate TEXT " +
+                "FOREIGN KEY (companyId) REFERENCES company + (id))";
 
         String CREATE_DAY_TABLE = "CREATE TABLE day ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
