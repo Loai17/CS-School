@@ -62,7 +62,7 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
                 //Add User
-                Manager manager = new Manager(fullName,username,company,email,password);
+                Manager manager = new Manager(fullName,username,1,email,password);
                 db.addManager(manager);
                 Toast.makeText(this, "You've signed up successfully!", Toast.LENGTH_LONG).show();
                 //Go to Login

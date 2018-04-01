@@ -15,7 +15,7 @@ public class JobsManagerActivity extends AppCompatActivity {
 
     GridView gridView;
     List<Job> jobsList;
-    MyAdapter adapter;
+//    MyAdapter adapter;
 
 
     @Override
@@ -37,7 +37,7 @@ public class JobsManagerActivity extends AppCompatActivity {
         jobsList = new ArrayList<Job>();
 
         jobsList = databaseHelper.getAllJobs();
-        adapter = new MyAdapter(JobsManagerActivity.this, (ArrayList<Job>) jobsList);
-        gridView.setAdapter(adapter);
+//        adapter = new MyAdapter(JobsManagerActivity.this, (ArrayList<Job>) jobsList);
+//        gridView.setAdapter(adapter);
     }
 }

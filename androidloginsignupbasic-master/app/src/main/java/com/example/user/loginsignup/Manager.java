@@ -9,7 +9,7 @@ public class Manager {
     private int id;
     private String fullName;
     private String username;
-    private String company;
+    private int companyId;
     private String email;
     private String password;
 
@@ -17,19 +17,19 @@ public class Manager {
 
     }
 
-    public Manager(String fullName, String username, String company,String email, String password) {
+    public Manager(String fullName, String username, int companyId,String email, String password) {
         this.fullName = fullName;
         this.username = username;
-        this.company = company;
+        this.companyId = companyId;
         this.email = email;
         this.password = password;
     }
 
-    public Manager(int id, String fullName, String username, String company,String email, String password) {
+    public Manager(int id, String fullName, String username, int companyId,String email, String password) {
         this.id = id;
         this.fullName = fullName;
         this.username = username;
-        this.company = company;
+        this.companyId = companyId;
         this.email = email;
         this.password = password;
     }
@@ -58,12 +58,10 @@ public class Manager {
         this.username = username;
     }
 
-    public String getCompany() {
-        return company;
-    }
+    public int getCompanyId() {return companyId;}
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
     }
 
     public String getEmail() {
@@ -88,7 +86,7 @@ public class Manager {
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
                 ", username='" + username + '\'' +
-                ", company='" + company + '\'' +
+                ", company='" + companyId + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';

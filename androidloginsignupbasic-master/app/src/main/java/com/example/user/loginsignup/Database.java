@@ -22,23 +22,25 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // SQL statement to create user table
+        // SQL statements to create tables
         String CREATE_MANAGER_TABLE = "CREATE TABLE manager ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "fullName TEXT, "+
                 "username TEXT, "+
-                "company TEXT, "+
+                "companyId TEXT, "+
                 "email TEXT, "+
-                "password TEXT )";
+                "password TEXT," +
+                " "+
+                "FOREIGN KEY (companyId) REFERENCES company + (id))";
 
         String CREATE_JOB_TABLE = "CREATE TABLE job ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "companyId INTEGER, "+ // Secondary---------------------
+                "companyId INTEGER, "+
                 "name TEXT, "+
                 "location TEXT, "+
                 "description TEXT, "+
                 "startDate TEXT, "+ //Date instead of TEXT
-                "endDate TEXT " +
+                "endDate TEXT, " +
                 "FOREIGN KEY (companyId) REFERENCES company + (id))";
 
         String CREATE_DAY_TABLE = "CREATE TABLE day ( " +
@@ -47,7 +49,10 @@ public class Database extends SQLiteOpenHelper {
                 "jobId INTEGER, "+
                 "date TEXT, "+ //Date instead of TEXT
                 "name TEXT, "+
-                "description TEXT )";
+                "description TEXT, "+
+                "FOREIGN KEY (companyId) REFERENCES company + (id),"+
+                "FOREIGN KEY (jobId) REFERENCES job + (id))";
+
 
         String CREATE_WORKER_TABLE = "CREATE TABLE worker ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -59,13 +64,18 @@ public class Database extends SQLiteOpenHelper {
                 "experience TEXT, "+
                 "payment REAL, "+ //Check that REAL = double
                 "paymentMethod TEXT, "+
-                "photo TEXT )";
+                "photo TEXT, "+
+                "FOREIGN KEY (companyId) REFERENCES company + (id))";
+
 
         String CREATE_DAYIMAGE_TABLE = "CREATE TABLE dayImage ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "dayId INTEGER, "+
                 "image TEXT, "+
-                "description TEXT )";
+                "description TEXT,"+
+                "FOREIGN KEY (dayId) REFERENCES day + (id))";
+
+
 
         String CREATE_SUPPLY_TABLE = "CREATE TABLE supply ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -77,18 +87,23 @@ public class Database extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "dayId INTEGER, "+
                 "supplyId INTEGER, "+
-                "count INTEGER )";
+                "count INTEGER, "+
+                "FOREIGN KEY (dayId) REFERENCES day + (id), "+
+                "FOREIGN KEY (supplyId) REFERENCES supply + (id))";
 
         String CREATE_DAYWORKER_TABLE = "CREATE TABLE dayWorker ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "dayId INTEGER, "+
-                "workerId INTEGER )";
+                "workerId INTEGER, "+
+                "FOREIGN KEY (dayId) REFERENCES day + (id), "+
+                "FOREIGN KEY (workerId) REFERENCES worker + (id))";
+
 
         String CREATE_COMPANY_TABLE = "CREATE TABLE company ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT )";
 
-        // create userss table
+        // create all tables
         db.execSQL(CREATE_MANAGER_TABLE);
         db.execSQL(CREATE_JOB_TABLE);
         db.execSQL(CREATE_DAY_TABLE);
@@ -104,7 +119,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older users table if existed
+        // Drop older tables if existed
         db.execSQL("DROP TABLE IF EXISTS manager");
         db.execSQL("DROP TABLE IF EXISTS job");
         db.execSQL("DROP TABLE IF EXISTS day");
@@ -115,22 +130,22 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS dayWorker");
         db.execSQL("DROP TABLE IF EXISTS company");
 
-        // create fresh users table
+        // create fresh new tables
         this.onCreate(db);
     }
 
     // Manager ------------------------------------------------------------
     private static final String TABLE_MANAGER = "manager";
 
-    // users Table Columns names
+    // Manager Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_FULLNAME = "fullName";
     private static final String KEY_USERNAME = "username";
-    private static final String KEY_COMPANY = "company";
+    private static final String KEY_COMPANYID = "companyId";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PASSWORD = "password";
 
-    private static final String[] MANAGER_COLUMNS = {KEY_ID,KEY_FULLNAME,KEY_USERNAME,KEY_COMPANY,KEY_EMAIL,KEY_PASSWORD};
+    private static final String[] MANAGER_COLUMNS = {KEY_ID,KEY_FULLNAME,KEY_USERNAME,KEY_COMPANYID,KEY_EMAIL,KEY_PASSWORD};
 
     public void addManager(Manager manager){
         Log.d("addManager", manager.toString());
@@ -141,7 +156,7 @@ public class Database extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_FULLNAME, manager.getFullName());
         values.put(KEY_USERNAME, manager.getUsername());
-        values.put(KEY_COMPANY, manager.getCompany());
+        values.put(KEY_COMPANYID, manager.getCompanyId());
         values.put(KEY_EMAIL, manager.getEmail());
         values.put(KEY_PASSWORD, manager.getPassword());
 
@@ -181,7 +196,7 @@ public class Database extends SQLiteOpenHelper {
             manager.setId(Integer.parseInt(cursor.getString(0)));
             manager.setFullName(cursor.getString(1));
             manager.setUsername(cursor.getString(2));
-            manager.setCompany(cursor.getString(3));
+            manager.setCompanyId(Integer.parseInt(cursor.getString(3)));
             manager.setEmail(cursor.getString(4));
             manager.setPassword(cursor.getString(5));
             Log.d("getManager(" + username + ")", manager.toString());
@@ -213,7 +228,7 @@ public class Database extends SQLiteOpenHelper {
                 manager.setId(Integer.parseInt(cursor.getString(0)));
                 manager.setFullName(cursor.getString(1));
                 manager.setUsername(cursor.getString(2));
-                manager.setCompany(cursor.getString(3));
+                manager.setCompanyId(Integer.parseInt(cursor.getString(3)));
                 manager.setEmail(cursor.getString(4));
                 manager.setPassword(cursor.getString(5));
 
@@ -238,7 +253,7 @@ public class Database extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("fullName", manager.getFullName()); // get title
         values.put("username", manager.getUsername()); // get author
-        values.put("company", manager.getCompany());
+        values.put("companyId", manager.getCompanyId());
         values.put("email", manager.getEmail());
         values.put("password", manager.getPassword());
 
@@ -1382,7 +1397,7 @@ public class Database extends SQLiteOpenHelper {
         Cursor cursor =
                 db.query(TABLE_COMPANY, // a. table
                         COMPANY_COLUMNS, // b. column names
-                        " name = ?", // c. selections
+                        "name = ?", // c. selections
                         new String[] { String.valueOf(name) }, // d. selections args
                         null, // e. group by
                         null, // f. having
