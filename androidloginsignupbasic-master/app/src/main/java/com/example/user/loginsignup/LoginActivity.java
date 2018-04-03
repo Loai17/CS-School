@@ -107,10 +107,11 @@ public class LoginActivity extends AppCompatActivity {
     public void gotoSignUp(View view) {
 //        Intent intent = new Intent(this, SignupActivity.class);
 //        startActivity(intent);
+
         Company company = new Company("LES");
         Job job = new Job(company.getId(),"JobNumOne","Nazareth","descccc","1","2");
         Day day = new Day(company.getId(),job.getId(),"1","Day1","descc for job");
-        DayImage dayImage = new DayImage(day.getId(),"imageLink","desssscription baby");
+        DayImage dayImage = new DayImage(day.getId(),"imageLink","desssscription");
         Supply supply = new Supply("supply name","imageLinkkk","supply description");
         DaySupply daySupply = new DaySupply(day.getId(),supply.getId(),3);
         Worker worker = new Worker(company.getId(),"Loai Worker","11/07","llo2ay","123123","professional",200,"Daily","photoLink again");
