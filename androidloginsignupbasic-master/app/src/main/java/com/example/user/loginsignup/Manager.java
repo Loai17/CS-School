@@ -86,7 +86,7 @@ public class Manager {
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
                 ", username='" + username + '\'' +
-                ", company='" + companyId + '\'' +
+                ", companyId='" + companyId + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';

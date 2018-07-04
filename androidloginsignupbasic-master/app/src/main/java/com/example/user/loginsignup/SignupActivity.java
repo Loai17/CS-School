@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class SignupActivity extends AppCompatActivity {
@@ -15,6 +17,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private EditText etConfirmPassword;
+    private ImageButton btnBack;
     private Database db;
 
 
@@ -34,18 +37,23 @@ public class SignupActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
         db = new Database(this);
+        btnBack = (ImageButton) findViewById(R.id.imgbtnBack);
     }
 
-    public void signUp(View view) {
 
+    public void backToLogin(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void signupFunc(View view) {
         String fullName = etFullName.getText().toString();
         String username = etUsername.getText().toString();
         String company = etCompany.getText().toString();
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         String confirmPassword = etConfirmPassword.getText().toString();
-
-        // if username exists: db.getUser(username)
 
         if (fullName.equals("") || username.equals("") || company.equals("") || email.equals("") || password.equals("") || confirmPassword.equals("")) {
             Toast.makeText(this, "Please fill all blanks!", Toast.LENGTH_LONG).show();
@@ -62,7 +70,10 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
                 //Add User
-                Manager manager = new Manager(fullName,username,1,email,password);
+                Company companyToAdd = new Company(company);
+                db.addCompany(companyToAdd);
+                Company getCompany = db.getCompany(company);
+                Manager manager = new Manager(fullName,username,getCompany.getId(),email,password);
                 db.addManager(manager);
                 Toast.makeText(this, "You've signed up successfully!", Toast.LENGTH_LONG).show();
                 //Go to Login

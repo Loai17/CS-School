@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.user.loginsignup">
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,7 +21,21 @@
         <activity
             android:name=".JobsManagerActivity"
             android:label="@string/title_activity_jobs_manager"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddJob"
+            android:label="@string/title_activity_add_job"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".WorkersActivity" />
+        <activity android:name=".AddWorkerActivity" />
+        <activity android:name=".AddDayActivity" />
+        <activity android:name=".WorkerProfileActivity" />
+        <activity android:name=".JobFinalDetailsActivity" />
+        <activity
+            android:name=".JobDetailsActivity"
+            android:label="@string/title_activity_job_details"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ShowDayDetailsActivity"></activity>
     </application>
 
 </manifest>

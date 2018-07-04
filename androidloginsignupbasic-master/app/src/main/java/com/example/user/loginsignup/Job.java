@@ -13,29 +13,23 @@ public class Job {
     private String name;
     private String location;
     private String description;
-    private String startDate;
-    private String endDate;
 
     public Job() {
     }
 
-    public Job(int companyId, String name, String location, String description, String startDate, String endDate) {
+    public Job(int companyId, String name, String location, String description) {
         this.companyId = companyId;
         this.name = name;
         this.location = location;
         this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
     }
 
-    public Job(int id, int companyId, String name, String location, String description, String startDate, String endDate) {
+    public Job(int id, int companyId, String name, String location, String description) {
         this.id = id;
         this.companyId = companyId;
         this.name = name;
         this.location = location;
         this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
     }
 
     public int getId() {
@@ -78,22 +72,6 @@ public class Job {
         this.description = description;
     }
 
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
     @Override
     public String toString() {
         return "Job{" +
@@ -102,8 +80,6 @@ public class Job {
                 ", name='" + name + '\'' +
                 ", location='" + location + '\'' +
                 ", description='" + description + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
                 '}';
     }
 }

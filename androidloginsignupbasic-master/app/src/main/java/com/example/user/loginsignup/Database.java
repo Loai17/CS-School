@@ -27,11 +27,11 @@ public class Database extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "fullName TEXT, "+
                 "username TEXT, "+
-                "companyId TEXT, "+
+                "companyId INTEGER, "+
                 "email TEXT, "+
-                "password TEXT," +
-                " "+
-                "FOREIGN KEY (companyId) REFERENCES company + (id))";
+                "password TEXT)";
+//                "password TEXT, "+
+//                "FOREIGN KEY (companyId) REFERENCES company(id))";
 
         String CREATE_JOB_TABLE = "CREATE TABLE job ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -39,9 +39,7 @@ public class Database extends SQLiteOpenHelper {
                 "name TEXT, "+
                 "location TEXT, "+
                 "description TEXT, "+
-                "startDate TEXT, "+ //Date instead of TEXT
-                "endDate TEXT, " +
-                "FOREIGN KEY (companyId) REFERENCES company + (id))";
+                "FOREIGN KEY (companyId) REFERENCES company(id))";
 
         String CREATE_DAY_TABLE = "CREATE TABLE day ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -50,8 +48,8 @@ public class Database extends SQLiteOpenHelper {
                 "date TEXT, "+ //Date instead of TEXT
                 "name TEXT, "+
                 "description TEXT, "+
-                "FOREIGN KEY (companyId) REFERENCES company + (id),"+
-                "FOREIGN KEY (jobId) REFERENCES job + (id))";
+                "FOREIGN KEY (companyId) REFERENCES company(id),"+
+                "FOREIGN KEY (jobId) REFERENCES job(id))";
 
 
         String CREATE_WORKER_TABLE = "CREATE TABLE worker ( " +
@@ -65,7 +63,7 @@ public class Database extends SQLiteOpenHelper {
                 "payment REAL, "+ //Check that REAL = double
                 "paymentMethod TEXT, "+
                 "photo TEXT, "+
-                "FOREIGN KEY (companyId) REFERENCES company + (id))";
+                "FOREIGN KEY (companyId) REFERENCES company(id))";
 
 
         String CREATE_DAYIMAGE_TABLE = "CREATE TABLE dayImage ( " +
@@ -73,7 +71,7 @@ public class Database extends SQLiteOpenHelper {
                 "dayId INTEGER, "+
                 "image TEXT, "+
                 "description TEXT,"+
-                "FOREIGN KEY (dayId) REFERENCES day + (id))";
+                "FOREIGN KEY (dayId) REFERENCES day(id))";
 
 
 
@@ -88,15 +86,15 @@ public class Database extends SQLiteOpenHelper {
                 "dayId INTEGER, "+
                 "supplyId INTEGER, "+
                 "count INTEGER, "+
-                "FOREIGN KEY (dayId) REFERENCES day + (id), "+
-                "FOREIGN KEY (supplyId) REFERENCES supply + (id))";
+                "FOREIGN KEY (dayId) REFERENCES day(id), "+
+                "FOREIGN KEY (supplyId) REFERENCES supply(id))";
 
         String CREATE_DAYWORKER_TABLE = "CREATE TABLE dayWorker ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "dayId INTEGER, "+
                 "workerId INTEGER, "+
-                "FOREIGN KEY (dayId) REFERENCES day + (id), "+
-                "FOREIGN KEY (workerId) REFERENCES worker + (id))";
+                "FOREIGN KEY (dayId) REFERENCES day(id), "+
+                "FOREIGN KEY (workerId) REFERENCES worker(id))";
 
 
         String CREATE_COMPANY_TABLE = "CREATE TABLE company ( " +
@@ -296,10 +294,8 @@ public class Database extends SQLiteOpenHelper {
     private static final String KEY_NAME_JOB = "name";
     private static final String KEY_LOCATION_JOB = "location";
     private static final String KEY_DESCRIPTION_JOB = "description";
-    private static final String KEY_STARTDATE_JOB = "startDate";
-    private static final String KEY_ENDDATE_JOB = "endDate";
 
-    private static final String[] JOB_COLUMNS = {KEY_ID_JOB,KEY_COMPANYID_JOB,KEY_NAME_JOB,KEY_LOCATION_JOB,KEY_DESCRIPTION_JOB,KEY_STARTDATE_JOB,KEY_ENDDATE_JOB};
+    private static final String[] JOB_COLUMNS = {KEY_ID_JOB,KEY_COMPANYID_JOB,KEY_NAME_JOB,KEY_LOCATION_JOB,KEY_DESCRIPTION_JOB};
 
     public void addJob(Job job){
         Log.d("addJob", job.toString());
@@ -308,13 +304,12 @@ public class Database extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID_JOB, job.getId());
+//        values.put(KEY_ID_JOB, job.getId());
         values.put(KEY_COMPANYID_JOB, job.getCompanyId());
         values.put(KEY_NAME_JOB, job.getName());
         values.put(KEY_LOCATION_JOB, job.getLocation());
         values.put(KEY_DESCRIPTION_JOB, job.getDescription());
-        values.put(KEY_STARTDATE_JOB, job.getStartDate());
-        values.put(KEY_ENDDATE_JOB, job.getEndDate());
+
 
         // 3. insert
         db.insert(TABLE_JOB, // table
@@ -354,8 +349,6 @@ public class Database extends SQLiteOpenHelper {
             job.setName(cursor.getString(2));
             job.setLocation(cursor.getString(3));
             job.setDescription(cursor.getString(4));
-            job.setStartDate(cursor.getString(5));
-            job.setEndDate(cursor.getString(6));
             Log.d("getJob(" + name + ")", job.toString());
             return job;
         }
@@ -387,8 +380,6 @@ public class Database extends SQLiteOpenHelper {
                 job.setName(cursor.getString(2));
                 job.setLocation(cursor.getString(3));
                 job.setDescription(cursor.getString(4));
-                job.setStartDate(cursor.getString(5));
-                job.setEndDate(cursor.getString(6));
 
                 // Add user to users
                 jobs.add(job);
@@ -413,8 +404,6 @@ public class Database extends SQLiteOpenHelper {
         values.put("name", job.getName()); // get author
         values.put("location", job.getLocation());
         values.put("description", job.getDescription());
-        values.put("startDate", job.getStartDate());
-        values.put("endDate", job.getEndDate());
 
         // 3. updating row
         int i = db.update(TABLE_JOB, //table
@@ -466,7 +455,7 @@ public class Database extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID_DAY, day.getId());
+//        values.put(KEY_ID_DAY, day.getId());
         values.put(KEY_COMPANYID_DAY, day.getCompanyId());
         values.put(KEY_JOBID_DAY, day.getJobId());
         values.put(KEY_DATE_DAY, day.getDate());
@@ -624,7 +613,7 @@ public class Database extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID_WORKER, worker.getId());
+        //values.put(KEY_ID_WORKER, worker.getId());
         values.put(KEY_COMPANYID_WORKER, worker.getCompanyId());
         values.put(KEY_NAME_WORKER, worker.getName());
         values.put(KEY_DOB_WORKER, worker.getDob());
@@ -653,7 +642,7 @@ public class Database extends SQLiteOpenHelper {
         Cursor cursor =
                 db.query(TABLE_WORKER, // a. table
                         WORKER_COLUMNS, // b. column names
-                        " name = ?", // c. selections
+                        " username = ?", // c. selections
                         new String[] { String.valueOf(username) }, // d. selections args
                         null, // e. group by
                         null, // f. having
@@ -675,7 +664,7 @@ public class Database extends SQLiteOpenHelper {
             worker.setUsername(cursor.getString(4));
             worker.setPassword(cursor.getString(5));
             worker.setExperience(cursor.getString(6));
-            worker.setPayment(Integer.parseInt(cursor.getString(7)));
+            worker.setPayment(Double.parseDouble(cursor.getString(7)));
             worker.setPaymentMethod(cursor.getString(8));
             worker.setPhoto(cursor.getString(9));
             Log.d("getWorker(" + username + ")", worker.toString());
@@ -712,7 +701,7 @@ public class Database extends SQLiteOpenHelper {
                 worker.setUsername(cursor.getString(4));
                 worker.setPassword(cursor.getString(5));
                 worker.setExperience(cursor.getString(6));
-                worker.setPayment(Integer.parseInt(cursor.getString(7)));
+                worker.setPayment(Double.parseDouble(cursor.getString(7)));
                 worker.setPaymentMethod(cursor.getString(8));
                 worker.setPhoto(cursor.getString(9));
 
@@ -795,7 +784,7 @@ public class Database extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID_DAYIMAGE, dayImage.getId());
+//        values.put(KEY_ID_DAYIMAGE, dayImage.getId());
         values.put(KEY_DAYID_DAYIMAGE, dayImage.getDayId());
         values.put(KEY_IMAGE_DAYIMAGE, dayImage.getImage());
         values.put(KEY_DESCRIPTION_DAYIMAGE, dayImage.getDescription());
@@ -839,6 +828,7 @@ public class Database extends SQLiteOpenHelper {
             dayImage.setDescription(cursor.getString(3));
             Log.d("getDayImage(" + image + ")", dayImage.toString());
             return dayImage;
+
 
         }
         else {
@@ -942,7 +932,7 @@ public class Database extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID_SUPPLY, supply.getId());
+//        values.put(KEY_ID_SUPPLY, supply.getId());
         values.put(KEY_NAME_SUPPLY, supply.getName());
         values.put(KEY_IMAGE_SUPPLY, supply.getImage());
         values.put(KEY_DESCRIPTION_SUPPLY, supply.getDescription());
@@ -1089,7 +1079,7 @@ public class Database extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID_DAYSUPPLY, daySupply.getId());
+//        values.put(KEY_ID_DAYSUPPLY, daySupply.getId());
         values.put(KEY_DAYID_DAYSUPPLY, daySupply.getDayId());
         values.put(KEY_SUPPLYID_DAYSUPPLY, daySupply.getSupplyId());
         values.put(KEY_COUNT_DAYSUPPLY, daySupply.getCount());
@@ -1235,7 +1225,7 @@ public class Database extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID_DAYWORKER, dayWorker.getId());
+//        values.put(KEY_ID_DAYWORKER, dayWorker.getId());
         values.put(KEY_DAYID_DAYWORKER, dayWorker.getDayId());
         values.put(KEY_WORKERID_DAYWORKER, dayWorker.getWorkerId());
 
@@ -1376,7 +1366,7 @@ public class Database extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID_COMPANY, company.getId());
+//        values.put(KEY_ID_COMPANY, company.getId());
         values.put(KEY_NAME_COMPANY, company.getName());
 
         // 3. insert
