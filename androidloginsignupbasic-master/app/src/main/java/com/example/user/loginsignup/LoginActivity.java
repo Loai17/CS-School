@@ -66,7 +66,8 @@ public class LoginActivity extends AppCompatActivity {
 
         Toast.makeText(this, "username :" + username, Toast.LENGTH_LONG).show();
         Worker workerLoggedIn= new Worker();
-        if(username.equalsIgnoreCase("")!=true){
+        if(username!=null) {
+            if (username.equals("") != true) {
 //            List<Worker> workers = db.getAllWorkers();
 //            for (Worker worker:workers) {
 //                if(worker.getUsername().equals(username)){
@@ -74,20 +75,20 @@ public class LoginActivity extends AppCompatActivity {
 //                }
 //            }
 ////            if(workerLoggedIn!=null){
-             if(db.getWorker(username)!=null){
-                if(db.getWorker(username).getPassword().equals(password)){
-                    editor.putBoolean("manager",false);
-                    editor.apply();
-                    Intent intent = new Intent(this, JobsManagerActivity.class); // ------CHANGE THIS TO WHERE THE WORKER IS SUPPOUSED TO GO-------
-                    startActivity(intent);
-                }
-            }
-            else if(db.getManager(username)!=null){
-                if(db.getManager(username).getPassword().equals(password)){
-                    editor.putBoolean("manager",true);
-                    editor.apply();
-                    Intent intent = new Intent(this, JobsManagerActivity.class);
-                    startActivity(intent);
+                if (db.getWorker(username) != null) {
+                    if (db.getWorker(username).getPassword().equals(password)) {
+                        editor.putBoolean("manager", false);
+                        editor.apply();
+                        Intent intent = new Intent(this, JobsManagerActivity.class); // ------CHANGE THIS TO WHERE THE WORKER IS SUPPOUSED TO GO-------
+                        startActivity(intent);
+                    }
+                } else if (db.getManager(username) != null) {
+                    if (db.getManager(username).getPassword().equals(password)) {
+                        editor.putBoolean("manager", true);
+                        editor.apply();
+                        Intent intent = new Intent(this, JobsManagerActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }
         }
